@@ -4,6 +4,13 @@
 
 Server gets requests from file `AzureLMMInferenceTrace_multimodal.csv` and creates objects of class requests with attributes:
 
+* `id` - request id (equivalent to the order of arrival)
+* `time` - time of arrival (from column `TIMESTAMP`)
+* `img` - number of images (from column `NumImages`)
+* `input_tokens` -  number of context tokens (from column `ContexTokens`)
+* 
+
+
 
 
 Test configuration:
@@ -18,4 +25,6 @@ Z_MEMORY_GEN_TOKEN = 40
 M_acc = 2e7
 K = 15
 </pre>
+
+
 
