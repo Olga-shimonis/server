@@ -21,14 +21,14 @@ The function `scheduler` distributes requests into batches according to the foll
 3) The resulting batch is divided into several batches (4, 3, 2, 1) depending on their size. The size of the resulting batches depends on the number of images (the more images, the fewer requests per batch).
 
    <pre>
-        if batch_size >= 10:
+        if batch_size >= 16:
 
             b_1 = batch_proc.copy()[:len(batch_proc)//10]
             b_2 = batch_proc.copy()[len(batch_proc)//10:len(batch_proc)//4]
             b_3 = batch_proc.copy()[len(batch_proc) // 4:len(batch_proc) // 2]
             b_4 = batch_proc.copy()[len(batch_proc) // 2:]
 
-        elif batch_size >= 6:
+        elif batch_size >= 8:
 
             b_1 = batch_proc.copy()[:len(batch_proc) // 4]
             b_2 = batch_proc.copy()[len(batch_proc) // 4:len(batch_proc) // 2]
