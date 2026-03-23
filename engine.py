@@ -4,9 +4,9 @@ import numpy as np
 import asyncio
 import statistics
 
-file_ttft = 'ttft 30.txt'
-file_tt= 'total time 30.txt'
-file_throughput = 'throughput 30.txt'
+file_ttft = 'metrics/ttft 30 new.txt'
+file_tt= 'metrics/total time 30 new.txt'
+file_throughput = 'throughput 30 new.txt'
 ttft_stats = []
 
 
@@ -66,7 +66,7 @@ async def prefill_stage(batch_proc, batch_memory, evict=False):
             batch_proc = batch_proc[:-1]
             batch_memory -= input_tok[-1] * config.Y_MEMORY_CONTEXT_TOKEN
             input_tok = input_tok[:-1]
-    t = np.sqrt(sum(input_tok)) * config.B_COST_CONTEXT_TOKEN
+    t = config.B_COST_CONTEXT_TOKEN * sum(input_tok) / np.sqrt(len(batch_proc))
 
 
     await asyncio.sleep(t)
@@ -108,10 +108,10 @@ async def decode_stage(batch_proc, batch_memory, finished, evict=False):
 
 
         finished += len(output_tok)
-        t = np.sqrt(sum(output_tok)) * config.C_COST_GEN_TOKENS
+        t = sum(output_tok) * config.C_COST_GEN_TOKENS / np.sqrt(len(batch_proc))
         start_gen_time = time.perf_counter()
-        for req in batch_proc:
-            req.start_gen = start_gen_time
+        '''for req in batch_proc:
+            req.start_gen = start_gen_time'''
 
         await asyncio.sleep(t)
         end_gen_time = time.perf_counter()
@@ -141,13 +141,13 @@ async def run_acceleration(acc, batch_queue):
         for req in acc.batch:
             img_sum += req.img
         acc.memory += img_sum * config.X_MEMORY_IMG
-        #print('Queue time', time.perf_counter() - acc.batch[0].start_preproc, acc.batch[0].id)
-        await asyncio.sleep(img_sum * np.sqrt(len(acc.batch)) * config.A_COST_IMG)
-
         batch_size = len(acc.batch)
+        await asyncio.sleep(img_sum * config.A_COST_IMG / np.sqrt(batch_size))
+
+
         finished = 0
-        with open(file_throughput, 'a', encoding='utf-8') as file:
-            file.write(str(batch_size) + '\n')
+        '''with open(file_throughput, 'a', encoding='utf-8') as file:
+            file.write(str(batch_size) + '\n')'''
 
         evicted_before_prefill, acc.memory, acc.batch = await prefill_stage(acc.batch, acc.memory)
 
@@ -179,9 +179,6 @@ async def scheduler(batch_queue):
     batch_proc = []
     img_sum = 0
 
-
-    # last_action = asyncio.get_event_loop().time()
-    # now = asyncio.get_event_loop().time()
     while True:
 
         now = time.perf_counter()
@@ -192,7 +189,7 @@ async def scheduler(batch_queue):
 
 
 
-        while len(batch_proc) < config.K*2 and not q.empty() and (now - first_arrive < 3 or len(batch_proc) == 0):
+        while len(batch_proc) < config.K*2 and not q.empty() and (now - first_arrive < 2 or len(batch_proc) == 0):
             req = await q.get()
             new_memory_batch = req.img * config.X_MEMORY_IMG
 
@@ -202,39 +199,38 @@ async def scheduler(batch_queue):
 
                 batch_memory += new_memory_batch
 
-            #now = asyncio.get_event_loop().time()
-            if len(batch_proc) > 0:
-                first_arrive = batch_proc[0].start_preproc
+            #if len(batch_proc) > 0:
+            first_arrive = batch_proc[0].start_preproc
 
-                now = time.perf_counter()
-                if now - first_arrive > 3 and len(batch_proc) > 1:
-                    break
+            now = time.perf_counter()
+            if now - first_arrive > 2 and len(batch_proc) > 1:
+                break
 
 
         if len(batch_proc) == 0:
             await asyncio.sleep(0.01)
             continue
 
-        print(batch_proc[0].time, batch_proc[-1].time)
+        print(batch_proc[0].time, batch_proc[-1].time, batch_proc[0].start_preproc - now, len(batch_proc))
 
 
 
 
 
 
-        batch_proc.sort(key=lambda req: (-req.img))
+        batch_proc.sort(key=lambda req: (-req.img, -req.gen_tokens))
 
         batch_size = len(batch_proc)
         b_1, b_2, b_3, b_4 = [], [], [], []
 
-        if batch_size >= 10:
+        if batch_size >= 16:
 
             b_1 = batch_proc.copy()[:len(batch_proc)//10]
             b_2 = batch_proc.copy()[len(batch_proc)//10:len(batch_proc)//4]
             b_3 = batch_proc.copy()[len(batch_proc) // 4:len(batch_proc) // 2]
             b_4 = batch_proc.copy()[len(batch_proc) // 2:]
 
-        elif batch_size >= 6:
+        elif batch_size >= 8:
 
             b_1 = batch_proc.copy()[:len(batch_proc) // 4]
             b_2 = batch_proc.copy()[len(batch_proc) // 4:len(batch_proc) // 2]

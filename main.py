@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 requests_db = pd.read_csv('AzureLMMInferenceTrace_multimodal.csv')
-requests_db = requests_db.iloc[:50000]
+requests_db = requests_db.iloc[:10000]
 
 requests_db['time'] = requests_db['TIMESTAMP'].apply(lambda x: x.split('T')[1])
 requests_db['time'] = requests_db['time'].apply(lambda x: x[:-1])
