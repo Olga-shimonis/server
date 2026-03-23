@@ -2,7 +2,7 @@
 
 ## Description 
 
-Server gets requests from file `` and creates objects of class requests with attributes:
+Server gets requests from file `AzureLMMInferenceTrace_multimodal.csv` and creates objects of class requests with attributes:
 
 
 
