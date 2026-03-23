@@ -13,7 +13,6 @@ total_time_15 = pd.read_csv('total time 15.txt', header=None)
 through_15 = pd.read_csv('throughput_15.txt', header=None)
 
 
-
 print(f'N = 15 mean TTFT = {ttft_db_15[0].mean()}, mode TTFT = {statistics.mode(list(ttft_db_15[0]))}, max TTFT = {ttft_db_15[0].max()}, min TTFT = {ttft_db_15[0].min()}')
 print(f'N = 15 mean T = {total_time_15[0].mean()}, mode T = {statistics.mode(list(total_time_15[0]))}, max T = {total_time_15[0].max()}, min T = {total_time_15[0].min()}')
 print(f'N = 20 mean TTFT = {ttft_db_20[0].mean()}, mode TTFT = {statistics.mode(list(ttft_db_20[0]))}, max TTFT = {ttft_db_20[0].max()}, min TTFT = {ttft_db_20[0].min()}')
