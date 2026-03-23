@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 import statistics
 
 
-ttft_db_20 = pd.read_csv('ttft 20.txt', header=None)
-total_time_20 = pd.read_csv('total time 20.txt', header=None)
-through_20 = pd.read_csv('throughput_20.txt', header=None)
+ttft_db_20 = pd.read_csv('metrics/ttft 20.txt', header=None)
+total_time_20 = pd.read_csv('metrics/total time 20.txt', header=None)
+through_20 = pd.read_csv('metrics/throughput_20.txt', header=None)
 
 
-ttft_db_15 = pd.read_csv('ttft 15.txt', header=None)
-total_time_15 = pd.read_csv('total time 15.txt', header=None)
-through_15 = pd.read_csv('throughput_15.txt', header=None)
+ttft_db_15 = pd.read_csv('metrics/ttft 15.txt', header=None)
+total_time_15 = pd.read_csv('metrics/total time 15.txt', header=None)
+through_15 = pd.read_csv('metrics/throughput_15.txt', header=None)
 
 
 print(f'N = 15 mean TTFT = {ttft_db_15[0].mean()}, mode TTFT = {statistics.mode(list(ttft_db_15[0]))}, max TTFT = {ttft_db_15[0].max()}, min TTFT = {ttft_db_15[0].min()}')
