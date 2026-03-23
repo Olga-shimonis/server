@@ -77,7 +77,7 @@ Time to first token for first 10000 requests
 | 15 | 1096.9240951536267 | 1098.8678830000572 | 2165.0263961999444 | 0.0686583999777212 |
 | 20 | 540.7039546100111 | 527.9426424000412 | 995.116417299956 | 0.0460666000144556 |
 | 25 | 191.54983671691943 | 201.25675229995977 | 319.5452687999932 | 0.030958899995312 |
-
+| 30 | 50.08267596248783 | 17.98727740009781 | 213.0327885999577 | 0.0148264999734237 |
 
 Total time for first 10000 requests
 
@@ -87,5 +87,21 @@ Total time for first 10000 requests
 | 15 | 1120.813653590948 | 1118.263390999986 | 2438.588019100018 | 3.9322435000212863 |
 | 20 | 564.4269609147907 | 546.2880118000321 | 1436.922390999971 | 1.863719799905084 |
 | 25 | 215.29441930075978 | 222.81302970007528 | 833.4084855000256 | 1.865089499973692 |
+| 30 | 73.83259591907283 | 43.99259630008601 | 660.5752685000189 |  0.18764130002819 |
 
+
+
+<img width="1609" height="842" alt="image" src="https://github.com/user-attachments/assets/08f1c103-3662-4be6-9dec-cbdfdb215a98" />
+
+<img width="1639" height="839" alt="image" src="https://github.com/user-attachments/assets/711a15ac-afd9-48fa-af0b-47ace790a0de" />
+
+Obviously, the best option is with N = 30
+
+## Possible options for improvement
+
+To reduce latency we can implement:
+
+* To divide requests into batches we can distribute the number of images and tokens more evenly.
+* Estimate the approximate batch processing and generation time and delete or add requests to the batch based on time constraints.
+* Implement continuous batching
 
