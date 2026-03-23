@@ -25,8 +25,6 @@ for i in range(1, len(rs)):
     intervals.append((time_2-time_1).seconds)
 
 
-
-
 async def main():
     gpu = []
     for i in range(config.N_acc):

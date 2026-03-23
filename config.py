@@ -7,6 +7,6 @@ Z_MEMORY_GEN_TOKEN = 40
 N_acc = 20
 M_acc = 2e7
 K = 15
-P_max_ttft = 60
+
 
 

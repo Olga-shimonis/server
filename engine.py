@@ -8,8 +8,6 @@ file_ttft = 'ttft 30.txt'
 file_tt= 'total time 30.txt'
 file_throughput = 'throughput 30.txt'
 
-
-
 ttft_stats = []
 
 
